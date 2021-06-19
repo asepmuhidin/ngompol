@@ -1,0 +1,60 @@
+import database dari file.sql
+
+- Buka browser alamat http://localhost/phpmyadmin (catatan : service mysql sudah hidup/on/start)
+- Klik tab import 
+- Klik tombol choose file, lalu pilih file.sql yg mau diimport
+- Pada bagian other options. unchecklist(hilangkan checklist) option "Enable foreign key checks"
+- Scrool ke bawah klik tombol "Go"
+- Import Selesai 
+
+Praktikum :
+1. Tampilkan jumlah products untuk tiap kategori(productlines)
+
+productLines      countOfProduct
+Motorcycles		190
+  -- 			 --
+  
+  select productLine, count(productLine) countOfProduct
+  from products 
+  group by productLine
+  order by countOfProduct desc; 
+2.Tampilkan jumlah products untuk tiap kategori(productlines) dengan jumlah product > 30
+
+productLines      countOfProduct
+Motorcycles		190
+  -- 			 --
+  
+  select productLine, count(productLine) countOfProduct
+  from products 
+  where productLine = 'Planes'
+  group by productLine
+  order by countOfProduct desc; 
+  
+  
+  ==BONUS====
+  select * from
+(select productLine, count(productLine) countOfProduct
+from products 
+group by productLine
+)grp
+where countOfProduct>10
+order by countOfProduct desc; 
+  
+3. Tampilkan jumlah transaksi tiap customer
+select c.customerNumber,customerName,count(orderNumber) countOfOrders
+from customers c inner join orders o on c.customerNumber=o.customerNumber
+group by  c.customerNumber,customerName
+order by countOfOrders 
+  
+4. Tampilkan data order dan detailnya dan tambahkan kolom subtotal dari data qyuantityOrdered * priceEach
+
+select o.orderNumber,orderDate,productCode,quantityOrdered, priceEach, quantityOrdered*priceEach subtotal
+from orders o inner join orderdetails d on o.orderNumber=d.orderNumber
+where customerNumber=456   
+  
+4. Tampilkan total order untuk customerNumber=456  
+select o.orderNumber,orderDate,sum(quantityOrdered*priceEach) subtotal
+from orders o inner join orderdetails d on o.orderNumber=d.orderNumber
+where customerNumber=456
+group by o.orderNumber,orderDate   
+
